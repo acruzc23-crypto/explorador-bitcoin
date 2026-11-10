@@ -1,0 +1,7 @@
+{
+  "name": "explorador-bitcoin",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": { "test": "node --test", "nodo": "node nodo/proxy.js" },
+  "license": "MIT"
+}

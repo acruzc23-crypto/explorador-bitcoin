@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Explorador Regtest</title>
+  <meta name="description" content="Mina bloques, envía transacciones y mira por dentro una cadena tipo Bitcoin regtest. También se conecta a tu propio nodo.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='2' y='9' width='12' height='14' rx='2' fill='%2316181d'/><rect x='18' y='9' width='12' height='14' rx='2' fill='%23f7931a'/><path d='M14 16h4' stroke='%2316181d' stroke-width='3'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="cabecera">
+    <div>
+      <h1>Explorador Regtest</h1>
+      <p>Una cadena de bloques como la de Bitcoin en modo regtest, para minar, enviar y ver qué hay dentro de cada bloque.</p>
+    </div>
+    <div class="modo" role="radiogroup" aria-label="Fuente de datos">
+      <button type="button" role="radio" data-modo="sim" aria-checked="true">Simulación</button>
+      <button type="button" role="radio" data-modo="nodo" aria-checked="false">Mi nodo</button>
+    </div>
+  </header>
+
+  <section class="estado" id="estado" aria-live="polite"></section>
+
+  <section class="riel" aria-labelledby="titulo-riel">
+    <h2 id="titulo-riel" class="visualmente-oculto">Cadena de bloques</h2>
+    <ol class="bloques" id="bloques"></ol>
+  </section>
+
+  <main class="cuerpo">
+    <aside class="acciones" id="panel-sim">
+      <section class="tarjeta">
+        <h2>Carteras</h2>
+        <ul class="carteras" id="carteras"></ul>
+      </section>
+
+      <section class="tarjeta">
+        <h2>Minar</h2>
+        <div class="fila">
+          <label for="minero">Recompensa para</label>
+          <select id="minero"></select>
+        </div>
+        <div class="fila">
+          <label for="dificultad">Dificultad</label>
+          <select id="dificultad">
+            <option value="1">1 cero (fácil)</option>
+            <option value="2">2 ceros</option>
+            <option value="3" selected>3 ceros</option>
+            <option value="4">4 ceros (lento)</option>
+          </select>
+        </div>
+        <div class="botones">
+          <button type="button" class="principal" id="minar1">Minar 1 bloque</button>
+          <button type="button" id="minar101">Minar 101 bloques</button>
+        </div>
+        <p class="minando" id="minando" aria-live="polite"></p>
+      </section>
+
+      <section class="tarjeta">
+        <h2>Enviar</h2>
+        <form id="enviar" class="enviar" autocomplete="off">
+          <div class="fila"><label for="de">De</label><select id="de"></select></div>
+          <div class="fila"><label for="a">Para</label><select id="a"></select></div>
+          <div class="fila"><label for="monto">Monto (BTC)</label><input id="monto" type="number" min="0.00000001" step="0.00000001" value="1.5" required></div>
+          <div class="fila"><label for="comision">Comisión (sats)</label><input id="comision" type="number" min="0" step="1" value="2000" required></div>
+          <button type="submit" class="principal">Enviar a la mempool</button>
+          <p class="mensaje" id="mensaje-enviar" role="status"></p>
+        </form>
+      </section>
+
+      <section class="tarjeta">
+        <h2>Mempool <span class="cuenta" id="cuenta-mempool"></span></h2>
+        <ul class="mempool" id="mempool"></ul>
+      </section>
+    </aside>
+
+    <aside class="acciones" id="panel-nodo" hidden>
+      <section class="tarjeta">
+        <h2>Conectar a mi nodo</h2>
+        <ol class="instrucciones">
+          <li>Arranca tu nodo: <code>bitcoind -regtest -daemon</code></li>
+          <li>Descarga este proyecto y arranca el puente de solo lectura:<br><code>BITCOIN_RPC_COOKIE=~/.bitcoin/regtest/.cookie npm run nodo</code></li>
+          <li>Escribe la dirección del puente y conecta.</li>
+        </ol>
+        <form id="conectar" class="enviar" autocomplete="off">
+          <div class="fila"><label for="url-nodo">Puente</label><input id="url-nodo" value="http://127.0.0.1:18080" required></div>
+          <button type="submit" class="principal">Conectar</button>
+          <p class="mensaje" id="mensaje-nodo" role="status"></p>
+        </form>
+      </section>
+    </aside>
+
+    <section class="detalle tarjeta" id="detalle" aria-live="polite"></section>
+  </main>
+
+  <footer class="pie">
+    Hecho por <a href="https://github.com/acruzc23-crypto">Alfredo Cruz</a> a partir de su laboratorio con Bitcoin Core en regtest. Simplificado para aprender: no hay firmas ni scripts.
+  </footer>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
